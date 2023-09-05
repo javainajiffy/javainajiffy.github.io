@@ -1,4 +1,57 @@
-Welcome to Java in A Jiffy!
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="../WEB-INF/templates/master.xhtml">
 
-Please check out my YouTube channel: <a href="https://www.youtube.com/channel/UCQblXmJ8YQtKJ3o1UdzByMA">Java In A Jiffy</a>
+	<ui:define name="content">
 
+	<style>
+		img {
+  			display: block;
+  			margin-left: auto;
+  			margin-right: auto;
+		}
+		img.resize-logo {
+  			height: 10%;
+  			width: 4.5%;
+		}
+	</style>
+
+		<h1 class="title" style="font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; text-align: center;">Welcome to Java in a Jiffy</h1>
+
+		<h2 class="title" style="font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; text-align: center;">Learn to Code. Quickly.</h2>
+
+		<img src="img/logo.png" class="resize-logo" alt="JavaInAJiffy" ">
+
+		<p:fieldset legend="Welcome to Java in a Jiffy" style="margin-bottom:20px" toggleable="true" toggleSpeed="500" collapsed="false" >
+			<p:fieldset legend="Top" style="margin-bottom:20px" toggleable="true" toggleSpeed="500" collapsed="false" class="ui-shadow">
+		 		<p style="margin-left:2em">
+		 			Please check out my YouTube channel: <a href="https://www.youtube.com/channel/UCQblXmJ8YQtKJ3o1UdzByMA">Java In A Jiffy</a>
+		 		</p>
+			</p:fieldset>
+			<h4 style="margin-left:2em;color:#0B6EFD">Introduction</h4>
+			<p:fieldset legend="Introduction" style="margin-bottom:20px" toggleable="true" toggleSpeed="500" collapsed="false" class="ui-shadow">
+				<ol style="margin-left:4em">
+					<li>
+						<a href="https://youtu.be/9jFulooK0ts?si=c6qFAOsb-DueHyXn">Introduction to Java in a Jiffy</a>
+					</li>
+				</ol>
+
+				<h4 style="margin-left:2em;color:#0B6EFD">Setup</h4>
+
+				<ol style="margin-left:4em">
+					<li>
+						<a href="https://youtu.be/25f4HhE8YTI?si=PanMt0HhjqjA4Iuu">Install Java</a>
+					</li>
+<br/>
+					<li>
+						<a href="https://youtu.be/HNRrZG2vjmU?si=pUaGLMk5NLEG67Gd">Setup Coding Workspace (Eclipse)</a>
+					</li>
+				</ol>
+			</p:fieldset>
+		</p:fieldset>
+
+	</ui:define>
+</ui:composition>

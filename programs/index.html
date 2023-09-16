@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="../WEB-INF/templates/master.xhtml">
+
+	<ui:define name="content">
+
+	<style>
+		img {
+  			display: block;
+  			margin-left: auto;
+  			margin-right: auto;
+		}
+		img.resize-logo {
+  			height: 10%;
+  			width: 4.5%;
+		}
+	</style>
+
+		<h1 class="title" style="font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; text-align: center;">Programs</h1>
+
+		<img src="img/logo.png" class="resize-logo" alt="JavaInAJiffy" ">
+
+		<p:fieldset legend="Programs" style="margin-bottom:20px" toggleable="true" toggleSpeed="500" collapsed="false" >
+			<h4 style="margin-left:2em;color:#0B6EFD">Program List</h4>
+			<p:fieldset legend="Program List" style="margin-bottom:20px" toggleable="true" toggleSpeed="500" collapsed="false" class="ui-shadow">
+				<ol style="margin-left:4em">
+					<li>
+						<a href="https://github.com/javainajiffy/javainajiffy.github.io/tree/main/programs/2">Program 2</a>
+					</li>
+<br/>
+					<li>
+						<a href="https://github.com/javainajiffy/javainajiffy.github.io/tree/main/programs/3">Program 3</a>
+					</li>
+<br/>
+					<li>
+						<a href="https://github.com/javainajiffy/javainajiffy.github.io/tree/main/programs/4">Program 4</a>
+					</li>
+					
+				</ol>
+			</p:fieldset>
+		</p:fieldset>
+
+	</ui:define>
+</ui:composition>

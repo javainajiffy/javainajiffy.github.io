@@ -1,0 +1,78 @@
+local baseplateLengthX = 250
+local baseplateHeightY = 1
+local baseplateWidthZ = 250
+local tagObjectSize = 10
+
+local tagObject = nil
+
+-- Functions
+-----------------------
+local function getRandomPositiveNegative()
+	local num = math.random(0,1);
+	if (num < 1) then
+		return -1
+	else
+		return 1
+	end
+end
+
+
+local function getRandomPositionOnBaseplate()
+	local x = math.random(tagObjectSize / 2, (baseplateLengthX - tagObjectSize) / 2) * getRandomPositiveNegative()
+	local y = 0
+	local z = math.random(tagObjectSize / 2, (baseplateLengthX - tagObjectSize) / 2) * getRandomPositiveNegative()
+	return Vector3.new (x, y, z);
+end
+
+
+local function setupBaseplate()
+	local baseplate = game.Workspace.Baseplate
+	baseplate.Size = Vector3.new(baseplateLengthX, baseplateHeightY, baseplateWidthZ)
+	return baseplate
+end
+local baseplate = setupBaseplate()
+
+
+
+
+local function setObject(obj)
+	obj.Size = Vector3.new (tagObjectSize / 2,tagObjectSize / 2 , tagObjectSize / 2);
+	obj.Color = Color3.new (math.random(0,255), math.random(0,255), math.random(0,255));
+	obj.Position = getRandomPositionOnBaseplate();
+	obj.Anchored = true;
+	return obj
+end
+
+
+local function createObject()
+	local obj = Instance.new("Part", game.Workspace);
+	return setObject(obj)
+end
+
+
+local function updateObject(obj)
+	if (obj == nil) then
+		obj = createObject()
+	else
+		setObject(obj)
+	end
+
+	return obj;
+end
+
+------------------------
+local function main ()
+	local secondsPassed = 0;
+	while (secondsPassed < 120) do
+		wait(3)
+		tagObject = updateObject(tagObject)
+		secondsPassed = secondsPassed + 3
+	end
+
+end
+
+
+
+
+main()
+

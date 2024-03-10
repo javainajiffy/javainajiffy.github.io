@@ -25,13 +25,19 @@ local function getRandomPositionOnBaseplate()
 end
 
 
-local function setupBaseplate()
-	local baseplate = game.Workspace.Baseplate
+local function setupBaseplate(baseplate)
 	baseplate.Size = Vector3.new(baseplateLengthX, baseplateHeightY, baseplateWidthZ)
 	return baseplate
 end
-local baseplate = setupBaseplate()
 
+
+local function setupGame(baseplate)
+	local baseplate = setupBaseplate(baseplate)
+	print("baseplate name: " .. baseplate.Name)
+	baseplate.CFrame = CFrame.new(Vector3.new(0,0,0))
+	local spawnLocation = baseplate.Parent:WaitForChild("SpawnLocation")
+	spawnLocation.Transparency = 1;
+end
 
 
 
@@ -62,6 +68,8 @@ end
 
 ------------------------
 local function main ()
+	local baseplate = game.Workspace:WaitForChild("Baseplate");
+	setupGame(baseplate);
 	local secondsPassed = 0;
 	while (secondsPassed < 120) do
 		wait(3)
@@ -75,4 +83,3 @@ end
 
 
 main()
-

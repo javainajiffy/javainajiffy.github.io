@@ -1,6 +1,6 @@
 --Random Cubes falling out of the sky
 --Inputs/Constants
-local sizeOfCube = 75
+local sizeOfCube = 50
 local maxCordinatesFromOrigin = 125
 local startingHeight = 500
 local secondsBeforeDestorying = 3

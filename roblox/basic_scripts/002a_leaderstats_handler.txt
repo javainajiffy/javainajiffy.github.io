@@ -11,5 +11,5 @@ game.Players.PlayerAdded:Connect(function(newPlayer)
 	local blocksTagged = Instance.new("IntValue", leaderStats)
 	blocksTagged.Name = "Blocks"
 	
-end
+	end
 )

@@ -1,7 +1,7 @@
 local baseplateLengthX = 250
 local baseplateHeightY = 1
 local baseplateWidthZ = 250
-local tagObjectSize = 10
+local tagObjectSize = 7
 
 local tagObject = nil
 
@@ -43,7 +43,7 @@ end
 
 
 local function setObject(obj)
-	obj.Size = Vector3.new (tagObjectSize / 2,tagObjectSize / 2 , tagObjectSize / 2);
+	obj.Size = Vector3.new (tagObjectSize, tagObjectSize, tagObjectSize);
 	obj.Color = Color3.new (math.random(0,255), math.random(0,255), math.random(0,255));
 	obj.Position = getRandomPositionOnBaseplate();
 	obj.Anchored = true;

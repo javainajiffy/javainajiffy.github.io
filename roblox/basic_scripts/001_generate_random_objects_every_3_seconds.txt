@@ -25,20 +25,13 @@ local function getRandomPositionOnBaseplate()
 end
 
 
-local function setupBaseplate(baseplate)
+local function setupBaseplate()
+	local baseplate = game.Workspace.Baseplate
 	baseplate.Size = Vector3.new(baseplateLengthX, baseplateHeightY, baseplateWidthZ)
 	return baseplate
 end
+local baseplate = setupBaseplate()
 
-
-local function setupGame()
-	local baseplate = game.Workspace:WaitForChild("Baseplate");
-	baseplate = setupBaseplate(baseplate)
-	print("baseplate name: " .. baseplate.Name)
-	baseplate.CFrame = CFrame.new(Vector3.new(0,0,0))
-	local spawnLocation = baseplate.Parent:WaitForChild("SpawnLocation")
-	spawnLocation.Transparency = 1;
-end
 
 
 
@@ -69,23 +62,12 @@ end
 
 ------------------------
 local function main ()
-	setupGame();
-	
-	tagObject = updateObject(tagObject)
-	
-	local touchAllowed = true;
-	
-	tagObject.Touched:Connect(function(objectThatTouched)
-		if (touchAllowed) then
-			touchAllowed = false
-			print("Object was touched!")
-			tagObject = updateObject(tagObject)
-			wait(0.5)
-			touchAllowed = true
-		end
-
-	end)
-
+	local secondsPassed = 0;
+	while (secondsPassed < 120) do
+		wait(3)
+		tagObject = updateObject(tagObject)
+		secondsPassed = secondsPassed + 3
+	end
 
 end
 
@@ -93,3 +75,4 @@ end
 
 
 main()
+

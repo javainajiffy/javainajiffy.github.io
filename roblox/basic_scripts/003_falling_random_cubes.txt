@@ -1,0 +1,83 @@
+--Random Cubes falling out of the sky
+--Inputs/Constants
+local sizeOfCube = 75
+local maxCordinatesFromOrigin = 125
+local startingHeight = 500
+local secondsBeforeDestorying = 3
+local numOfCubesAtOnce = 1
+
+
+--Start Script
+local currentNumOfObjects = 0
+
+local function getRandomPositiveNegative()
+	local num = math.random(0,1);
+	if (num < 1) then
+		return -1
+	else
+		return 1
+	end
+end
+
+local function getRandomCubeStartingPosition(sizeOfCube, maxCordinatesFromOrigin, startingHeight)
+	local x = math.random(0, maxCordinatesFromOrigin - sizeOfCube) * getRandomPositiveNegative()
+	local y = startingHeight
+	local z = math.random(0, maxCordinatesFromOrigin - sizeOfCube) * getRandomPositiveNegative()
+	return Vector3.new (x, y, z);
+end
+
+
+local function destroyCubeWhenHitBaseplate(objectThatHitBaseplate)
+	if (objectThatHitBaseplate.Name == "Cube") then
+		print("destroying in "..secondsBeforeDestorying.." seconds")
+		wait(secondsBeforeDestorying)
+		objectThatHitBaseplate:Destroy()
+		currentNumOfObjects = numOfCubesAtOnce - 1
+	end
+end
+
+local function createFallingCube(sizeOfCube, maxCordinatesFromOrigin, startingHeight)
+	currentNumOfObjects = currentNumOfObjects + 1
+	print("new object created: new count: "..currentNumOfObjects)
+	local fallingCube = Instance.new("Part", game.Workspace);
+	fallingCube.Name = "Cube"
+	game.Workspace.Baseplate.Touched:Connect(destroyCubeWhenHitBaseplate)
+	fallingCube.Size = Vector3.new (sizeOfCube, sizeOfCube, sizeOfCube);
+	fallingCube.Color = Color3.new (math.random(0,255), math.random(0,255), math.random(0,255));
+	fallingCube.Position = getRandomCubeStartingPosition(sizeOfCube, maxCordinatesFromOrigin, startingHeight)
+	fallingCube.Anchored = false
+	return fallingCube
+end
+
+
+
+
+local totalCreated = 0
+local enableCreation = true
+while (totalCreated < 1000) do
+	if (currentNumOfObjects < numOfCubesAtOnce) then
+		if (totalCreated == 0)  then
+			wait(5)
+		end
+		
+		if (enableCreation)  then
+			enableCreation = false
+			
+			totalCreated = totalCreated + 1
+			print("creating")
+			createFallingCube(sizeOfCube, maxCordinatesFromOrigin, startingHeight)
+			print("created")
+			
+			enableCreation = true
+		end
+
+	else
+		print("waiting: total objs:"..currentNumOfObjects)
+		wait(secondsBeforeDestorying)
+	end
+	
+end
+
+
+
+

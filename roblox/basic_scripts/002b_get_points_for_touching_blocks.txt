@@ -1,0 +1,131 @@
+local baseplateLengthX = 250
+local baseplateHeightY = 1
+local baseplateWidthZ = 250
+local tagObjectSize = 10
+
+local tagObject = nil
+
+-- Functions
+-----------------------
+local function getRandomPositiveNegative()
+	local num = math.random(0,1);
+	if (num < 1) then
+		return -1
+	else
+		return 1
+	end
+end
+
+
+local function getRandomPositionOnBaseplate()
+	local x = math.random(tagObjectSize / 2, (baseplateLengthX - tagObjectSize) / 2) * getRandomPositiveNegative()
+	local y = 0
+	local z = math.random(tagObjectSize / 2, (baseplateLengthX - tagObjectSize) / 2) * getRandomPositiveNegative()
+	return Vector3.new (x, y, z);
+end
+
+
+local function setupBaseplate(baseplate)
+	baseplate.Size = Vector3.new(baseplateLengthX, baseplateHeightY, baseplateWidthZ)
+	return baseplate
+end
+
+
+local function setupGame()
+	local baseplate = game.Workspace:WaitForChild("Baseplate");
+	baseplate = setupBaseplate(baseplate)
+	print("baseplate name: " .. baseplate.Name)
+	baseplate.CFrame = CFrame.new(Vector3.new(0,0,0))
+	local spawnLocation = baseplate.Parent:WaitForChild("SpawnLocation")
+	spawnLocation.Transparency = 1;
+end
+
+
+
+local function setObject(obj)
+	obj.Size = Vector3.new (tagObjectSize / 2,tagObjectSize / 2 , tagObjectSize / 2);
+	obj.Color = Color3.new (math.random(0,255), math.random(0,255), math.random(0,255));
+	obj.Position = getRandomPositionOnBaseplate();
+	obj.Anchored = true;
+	return obj
+end
+
+
+local function createObject()
+	local obj = Instance.new("Part", game.Workspace);
+	return setObject(obj)
+end
+
+
+local function updateObject(obj)
+	if (obj == nil) then
+		obj = createObject()
+	else
+		setObject(obj)
+	end
+
+	return obj;
+end
+
+
+local function getPlayerThatTouched(objectThatTouched)
+	-- Check if the objectThatTouched is touching a humanoid
+	local humanoid = objectThatTouched.Parent:FindFirstChild("Humanoid")
+	if humanoid then
+		-- Check if the humanoid has a corresponding player
+		local player = game.Players:GetPlayerFromCharacter(humanoid.Parent)
+		if player then
+			-- Get the player's name
+			local playerName = player.Name
+			print(playerName .. " touched the part!")
+			return player
+		end
+	else
+		--print("Object was touched by a non-Humanoid part")
+	end
+	return nil
+end
+
+
+local function addPointsToPlayer(player) 
+	if player then
+		print("Updating player blocks tagged value")
+		local blocks = player.leaderstats.Blocks
+		blocks.Value = blocks.Value + 1
+	else
+		print("player was null. Not updating any blocks value")
+	end
+end
+
+------------------------
+local function main ()
+	setupGame();
+	
+	tagObject = updateObject(tagObject)
+	
+	local touchAllowed = true;
+	
+	tagObject.Touched:Connect(function(objectThatTouched)
+		if (touchAllowed) then
+			local playerThatTouched = getPlayerThatTouched(objectThatTouched)
+			if playerThatTouched then
+				touchAllowed = false
+				print("Object was touched by "..playerThatTouched.Name.."!")
+				addPointsToPlayer(playerThatTouched)
+				tagObject = updateObject(tagObject)
+				wait(0.5)
+				touchAllowed = true
+				
+			end
+
+		end
+
+	end)
+
+
+end
+
+
+
+
+main()

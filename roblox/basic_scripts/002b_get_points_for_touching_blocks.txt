@@ -2,7 +2,7 @@ local baseplateLengthX = 250
 local baseplateHeightY = 1
 local baseplateWidthZ = 250
 local tagObjectSize = 7
-
+local outsideBuffer = 10
 local tagObject = nil
 
 -- Functions
@@ -18,9 +18,11 @@ end
 
 
 local function getRandomPositionOnBaseplate()
-	local x = math.random(tagObjectSize / 2, (baseplateLengthX - tagObjectSize) / 2) * getRandomPositiveNegative()
+	local maxX = (baseplateLengthX / 2) - tagObjectSize - outsideBuffer
+	local maxZ = (baseplateWidthZ / 2) - tagObjectSize - outsideBuffer
+	local x = math.random((maxX * -1),maxX)
 	local y = 0
-	local z = math.random(tagObjectSize / 2, (baseplateLengthX - tagObjectSize) / 2) * getRandomPositiveNegative()
+	local z = math.random((maxZ * -1),maxZ)
 	return Vector3.new (x, y, z);
 end
 
@@ -53,6 +55,7 @@ end
 
 local function createObject()
 	local obj = Instance.new("Part", game.Workspace);
+	obj.Name = "tagPart"
 	return setObject(obj)
 end
 

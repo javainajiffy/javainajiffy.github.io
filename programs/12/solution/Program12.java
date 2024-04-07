@@ -9,6 +9,7 @@ public class Program12 {
 
 		Scanner s = new Scanner(System.in);
 		double pounds = s.nextDouble();
+		s.close();
 		
 		double kilograms = pounds / 2.21;
 	

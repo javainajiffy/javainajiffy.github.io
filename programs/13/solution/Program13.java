@@ -22,6 +22,6 @@ public class Program13 {
 		System.out.println("The volume of a cylindrical fuel tank ");
 		System.out.println("with height, "  + h + ", and radius, " + r + ", is: " + v );
 		System.out.println("\nThe surface area of a cylindrical fuel tank ");
-		System.out.println("with height, "  + h + ", and radius, " + r + ", is: " + surfaceArea )
+		System.out.println("with height, "  + h + ", and radius, " + r + ", is: " + surfaceArea );
 	}
 }

@@ -1,0 +1,4 @@
+local gameTeleporter = require(game.ServerScriptService.mscript_gameTeleporter)
+
+
+script.Parent.Touched:Connect(gameTeleporter.onTouched)

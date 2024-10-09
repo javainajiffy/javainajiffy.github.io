@@ -1,0 +1,58 @@
+local playerTeleportData = {}
+
+
+function playerTeleportData.updateWins(player, pointsToAdd)
+	local wins = player.leaderstats.Wins
+	if wins then
+		print("Player's Wins: " .. wins.Value)
+		-- You can now safely use the wins.Value
+		print("Updating player wins value")
+		local wins = player.leaderstats.Wins
+		print("wins.value: " .. wins.Value)
+		wins.Value = wins.Value + pointsToAdd
+		print("updated wins.Value: " .. wins.Value)
+	else
+		print("Leaderstats not found for the player.")
+	end
+end
+
+function playerTeleportData.addPointsToPlayer(playerUserId, pointsToAdd)
+	local player = game:GetService("Players"):GetPlayerByUserId(playerUserId)
+	if player then
+		-- Check if leaderstats is already available
+		if player:FindFirstChild("leaderstats") then
+			playerTeleportData.updateWins(player, pointsToAdd)
+		end
+	else
+		print("player was nil. Not updating wins")
+	end
+end
+
+
+function playerTeleportData.determineWinningPlayer(teleportData, newPlayer)
+	local winPlayerUserId = teleportData.winPlayerUserId
+	if (winPlayerUserId ~= nil and newPlayer.UserId == winPlayerUserId) then
+		print("Winning Player " .. newPlayer.Name .. ": teleportData.winPlayerUserId: " .. tostring(winPlayerUserId))
+		playerTeleportData.addPointsToPlayer(winPlayerUserId, 1)
+	elseif (winPlayerUserId ~= nil) then
+		print("Returning Player " .. newPlayer.Name .. ": teleportData.winPlayerUserId: " .. tostring(winPlayerUserId))
+	else
+		print("Player " .. newPlayer.Name .. ": teleportData.winPlayerUserId: nil")
+	end
+end
+
+
+function playerTeleportData.checkTeleportData(newPlayer)
+	local joinData = newPlayer:GetJoinData()
+	local teleportData = joinData.TeleportData
+
+	if (teleportData ~= nil) then
+		playerTeleportData.determineWinningPlayer(teleportData, newPlayer)
+	else
+		print("teleport data not found for player: " .. newPlayer.Name)
+	end
+
+end
+
+
+return playerTeleportData

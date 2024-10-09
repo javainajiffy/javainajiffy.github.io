@@ -1,0 +1,14 @@
+local character = {}
+
+
+function character.setup(player)
+	local function characterAdded(character)
+		print(player.Name .. " character added.")
+	end
+
+	characterAdded(player.Character or player.CharacterAdded:Wait())
+	player.CharacterAdded:Connect(characterAdded)
+end
+
+
+return character

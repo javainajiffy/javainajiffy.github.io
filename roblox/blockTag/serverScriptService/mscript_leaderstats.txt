@@ -1,0 +1,71 @@
+local leaderstats = {}
+
+local util = require(game.ServerScriptService.mscript_util)
+
+-- Make sure "Enable Studio Access To API Services" is on in Game Settings! (*OR IT WON'T WORK*) --
+local Players = game:GetService("Players")
+local DataStoreService = game:GetService("DataStoreService")
+local Saver = DataStoreService:GetDataStore("SaveLeaderstats")
+
+function leaderstats.load(player)
+	local Data = nil
+	local success, errormessage = pcall(function()
+		Data = Saver:GetAsync(tostring(player.UserId))
+	end)
+
+	print(player.Name .. " load successful? " .. tostring(success))
+
+	if success then
+		if Data then
+			for i, v in pairs(Data) do
+				player:WaitForChild("leaderstats"):WaitForChild(i).Value = v
+				print("setting: " .. i .. " to " .. v)
+			end
+		end
+	else
+		error(errormessage)
+	end
+end
+
+function leaderstats.save(player)
+	local SavedData = {}
+	for _, v in pairs(player.leaderstats:GetChildren()) do
+		SavedData[v.Name] = v.Value
+	end
+
+	local success, errormessage = pcall(function()
+		Saver:SetAsync(tostring(player.UserId), SavedData)
+	end)
+	if not success then
+		error(errormessage)
+	end
+end
+
+
+function leaderstats.setup(player)
+	--This is creating a new folder and putting it into the parent "newPlayer"
+	local leaderStats = Instance.new("Folder", player)
+
+	--This name must be "leaderstats"
+	leaderStats.Name = "leaderstats"
+
+	--IntValue is a number that is GLOBAL across all scripts
+	--adding the intValue into leaderStats
+	local wins = Instance.new("IntValue", leaderStats)
+	wins.Name = "Wins"
+
+	print("loading leaderstats for " .. player.Name)
+	leaderstats.load(player)
+end
+
+
+Players.PlayerRemoving:Connect(leaderstats.save)
+
+game:BindToClose(function()
+	for _, v in pairs(Players:GetPlayers()) do
+		leaderstats.save(v)
+	end
+end)
+
+
+return leaderstats

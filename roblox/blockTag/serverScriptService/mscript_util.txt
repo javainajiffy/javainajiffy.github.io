@@ -1,0 +1,27 @@
+local utils = {}
+
+
+-- Function to get the size of the map
+function utils.tableSize(t)
+	local count = 0
+	for _ in pairs(t) do
+		count = count + 1
+	end
+	return count
+end
+
+function utils.isInstance(obj)
+	return typeof(obj) == "Instance"
+end
+
+
+function utils.printVar(myVariable)
+	if utils.isInstance(myVariable) then
+		print("Instance: " .. tostring(myVariable))
+	else
+		print("Variable: " .. myVariable)
+	end
+end
+
+
+return utils

@@ -1,0 +1,78 @@
+local util = require(game.ServerScriptService.mscript_util)
+
+local gameTeleporter = {}
+
+local TeleportService = game:GetService("TeleportService")
+local gameID = 109697566309065
+local waitingPlayersMap = {}
+local minNumOfPlayers = 2
+local maxNumOfPlayers = 10
+local teleportInProgress = false
+
+
+
+function gameTeleporter.teleportWaitingPlayers()
+	local playersToTeleport = {}
+
+	local playerService = game:GetService("Players");
+
+	local count = 0
+	for playerUseId,_ in pairs(waitingPlayersMap) do
+		print("player to teleport: " .. playerUseId)
+		local player = playerService:GetPlayerByUserId(playerUseId)
+		if (player) then
+			print("player found waiting: " .. player.Name)
+			table.insert(playersToTeleport, player)
+			count = count + 1
+		else
+			print("player invalid: " .. playerUseId)
+			waitingPlayersMap[playerUseId] = nil
+		end
+
+		if (count >= maxNumOfPlayers) then
+			break
+		end
+	end
+
+	if (util.tableSize(playersToTeleport) < minNumOfPlayers) then
+		print("Not enough players to waiting to start game.")
+		return
+	end
+
+
+	local reservedServer = TeleportService:ReserveServer(gameID)
+	TeleportService:TeleportToPrivateServer(gameID, reservedServer, playersToTeleport)
+
+end
+
+
+function gameTeleporter.onTouched(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+
+	if (player) then
+		local teleportProcessEnabled = waitingPlayersMap[player.UserId]
+		if (teleportProcessEnabled == nil)  then
+			waitingPlayersMap[player.UserId] = true
+		else
+			print("multiple teleport call protection lock enabled.")
+		end
+
+		local waitingPlayerCount = util.tableSize(waitingPlayersMap)
+		if (waitingPlayerCount >= minNumOfPlayers and not teleportInProgress) then
+			wait(5)
+			teleportInProgress = true
+			gameTeleporter.teleportWaitingPlayers(player)
+			teleportInProgress = false
+		elseif (teleportInProgress) then
+			print("teleport in progress. Please try again shortly.")
+		else
+			print("Need at least " .. tostring(minNumOfPlayers) .. ". Currently have: " .. tostring(waitingPlayerCount))
+		end
+
+	end
+end
+
+
+
+
+return gameTeleporter

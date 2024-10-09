@@ -1,0 +1,35 @@
+local util = require(game.ServerScriptService.mscript_util)
+local character = require(game.ServerScriptService.mscript_character)
+local leaderstats = require(game.ServerScriptService.mscript_leaderstats)
+local playerTeleportData = require(game.ServerScriptService.mscript_playerTeleportData)
+
+
+
+function playerAdded(player)
+	print(player.Name .. " has entered the server.")
+	character.setup(player)
+	leaderstats.setup(player)
+	playerTeleportData.checkTeleportData(player)
+end
+
+
+
+function main()
+	
+	-- see: https://www.youtube.com/watch?v=bX8MxozRTGo
+	game.Players.PlayerAdded:Connect(playerAdded)
+	
+	for _,player in pairs(game.Players:GetPlayers()) do
+		spawn(function() playerAdded(player) end)
+	end
+	
+	
+end
+
+main()
+
+
+
+
+
+

@@ -1,0 +1,15 @@
+game.Players.PlayerAdded:Connect(function(newPlayer)
+	
+	--This is creating a new folder and putting it into the parent "newPlayer"
+	local leaderStats = Instance.new("Folder", newPlayer)
+	
+	--This name must be "leaderstats"
+	leaderStats.Name = "leaderstats"
+	
+	--IntValue is a number that is GLOBAL across all scripts
+	--adding the intValue into leaderStats
+	local blocksTagged = Instance.new("IntValue", leaderStats)
+	blocksTagged.Name = "Blocks"
+	
+	end
+)

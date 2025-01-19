@@ -1,0 +1,157 @@
+--Spawn random speed orbs
+--Inputs/Constants
+local sizeOfOrb = 3
+local orbSpeedBuffIncrease = 30
+local orbSpeedBuffDuration = 3
+local outsideBuffer = 10
+local maxCordinatesFromOrigin = 125
+local startingHeight = 1
+local secondsBeforeDestorying = 35
+local maxAllowedAtOnce = 5
+
+
+
+--Start Script
+local currentNumOfObjects = 0
+local defaultWalkSpeed = 16
+
+local function getRandomPositiveNegative()
+	local num = math.random(0,1);
+	if (num < 1) then
+		return -1
+	else
+		return 1
+	end
+end
+
+
+local function getColorFromRGB(r, g, b)
+	return Color3.new(r / 255, g / 255, b / 255)
+end
+local orbColor = getColorFromRGB(255,255,0)
+
+
+local function getRandomOrbStartingPosition(sizeOfOrb, maxCordinatesFromOrigin, startingHeight)
+	local maxX = (maxCordinatesFromOrigin / 2) - sizeOfOrb - outsideBuffer
+	local maxZ = (maxCordinatesFromOrigin / 2) - sizeOfOrb - outsideBuffer
+	local x = math.random((maxX * -1),maxX)
+	local y = startingHeight
+	local z = math.random((maxZ * -1),maxZ)
+	return Vector3.new (x, y, z);
+end
+
+
+local function destroyOrbsWhenHitBaseplate(objectThatHitBaseplate)
+	if (objectThatHitBaseplate.Name == "Orb") then
+		print("destroying orb in "..secondsBeforeDestorying.." seconds")
+		wait(secondsBeforeDestorying)
+		objectThatHitBaseplate:Destroy()
+		currentNumOfObjects = maxAllowedAtOnce - 1
+	end
+end
+
+local function createSpeedOrb(sizeOfOrb, maxCordinatesFromOrigin, startingHeight)
+	currentNumOfObjects = currentNumOfObjects + 1
+	print("new orb created: new count: "..currentNumOfObjects)
+	local speedOrb = Instance.new("Part", game.Workspace);
+	speedOrb.Name = "Orb"
+	game.Workspace.Baseplate.Touched:Connect(destroyOrbsWhenHitBaseplate)
+	speedOrb.Size = Vector3.new (sizeOfOrb, sizeOfOrb, sizeOfOrb);
+	speedOrb.Shape = Enum.PartType.Ball
+	speedOrb.Color = orbColor;
+	speedOrb.Position = getRandomOrbStartingPosition(sizeOfOrb, maxCordinatesFromOrigin, startingHeight)
+	speedOrb.Anchored = true
+	speedOrb.Transparency = 0.5
+	return speedOrb
+end
+
+
+local function getPlayerThatTouched(objectThatTouched)
+	-- Check if the objectThatTouched is touching a humanoid
+	local humanoid = objectThatTouched.Parent:FindFirstChild("Humanoid")
+	if humanoid then
+		-- Check if the humanoid has a corresponding player
+		local player = game.Players:GetPlayerFromCharacter(humanoid.Parent)
+		if player then
+			-- Get the player's name
+			local playerName = player.Name
+			print(playerName .. " touched the orb!")
+			return player
+		end
+	else
+		--print("Object was touched by a non-Humanoid part")
+	end
+	return nil
+end
+
+
+local function increaseSpeed(player, orb)
+	-- Store the player's original walk speed
+	local originalWalkSpeed = player.Character.Humanoid.WalkSpeed
+
+	if (originalWalkSpeed <= defaultWalkSpeed)  then
+		orb:Destroy()
+		currentNumOfObjects = maxAllowedAtOnce - 1
+		
+		-- Increase the player's walk speed
+		player.Character.Humanoid.WalkSpeed = originalWalkSpeed + orbSpeedBuffIncrease
+		print("player speed increased")
+		wait(orbSpeedBuffDuration)
+
+		-- Restore the player's original walk speed
+		player.Character.Humanoid.WalkSpeed = defaultWalkSpeed
+		print("player speed returned to normal")
+		
+	else
+		print(player.Name.." already has speed buff!")
+	end
+
+end
+
+
+local function addPlayerTouchEventToPart(orb)
+	
+	local touchAllowed = true;
+
+	orb.Touched:Connect(function(objectThatTouched)
+		if (touchAllowed) then
+			local playerThatTouched = getPlayerThatTouched(objectThatTouched)
+			if playerThatTouched then
+				touchAllowed = false
+				print("Orb was touched by "..playerThatTouched.Name.."!")
+				increaseSpeed(playerThatTouched, orb)
+				wait(0.5)
+				touchAllowed = true
+
+			end
+
+		end
+	end)
+	
+end
+
+
+local totalCreated = 0
+local enableCreation = true
+while (totalCreated < 1000) do
+	if (currentNumOfObjects < maxAllowedAtOnce) then
+		if (totalCreated == 0)  then
+			wait(5)
+		end
+
+		if (enableCreation)  then
+			enableCreation = false
+
+			totalCreated = totalCreated + 1
+			print("creating orb")
+			local speedOrb = createSpeedOrb(sizeOfOrb, maxCordinatesFromOrigin, startingHeight)
+			addPlayerTouchEventToPart(speedOrb)
+			enableCreation = true
+		end
+
+	else
+		print("waiting: total orbs:"..currentNumOfObjects)
+		wait(secondsBeforeDestorying)
+	end
+
+end

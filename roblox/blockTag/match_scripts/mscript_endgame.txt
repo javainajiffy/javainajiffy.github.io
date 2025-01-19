@@ -1,0 +1,31 @@
+local endgame = {}
+
+endgame.lobbyGameId = 18997368800
+
+
+function endgame.getAllPlayers()
+	local allPlayers = {}
+	
+	for _,player in pairs(game.Players:GetPlayers()) do
+		table.insert(allPlayers, player)
+	end
+	
+	return allPlayers
+end
+
+
+function endgame.teleportAllPlayers(player)
+	print("Player " .. player.name .. " won!")
+	local teleportService = game:GetService("TeleportService")
+	local teleportOptions = Instance.new("TeleportOptions")
+
+	local teleportData = {
+		winPlayerUserId = player.UserId
+	}
+
+	teleportOptions:SetTeleportData(teleportData)
+
+	teleportService.TeleportAsync(teleportService, endgame.lobbyGameId, endgame.getAllPlayers(), teleportOptions)
+end
+
+return endgame

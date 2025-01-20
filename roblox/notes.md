@@ -4,6 +4,19 @@
 
 ## Tools
 - Creating a "Part" as a child of a "Tool", and naming it "Handle" will automatically show it getting held by a character when equipped within the game.
+> local tool = script.Parent
+> tool.Equipped:Connect(function()
+>   print("this tool has been equipped")
+> end)
+> tool.Unequipped:Connect(function()
+>   print("this tool has been unequipped")
+> end)
+> tool.Activated:Connect(function()
+>   print("this tool has been activated")
+> end)
+> tool.Deactivated:Connect(function()
+>   print("this tool has been deactivated")
+> end)
 
 # Script
 - Replicated to all players

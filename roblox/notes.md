@@ -1,3 +1,6 @@
+Video explaining each of the main areas in roblox studio
+https://www.youtube.com/watch?v=_u3G7t5yyJQ
+
 # StarterPack
 - Place tools in here that will be given to all characters when they spawn into the game
 - How to add a image to a tool: https://www.youtube.com/watch?v=drQkCsL80KM&t=370s
